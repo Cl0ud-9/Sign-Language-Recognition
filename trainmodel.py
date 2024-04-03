@@ -1,4 +1,3 @@
-from function import *
 from sklearn.model_selection import train_test_split
 from keras.utils import to_categorical
 from keras.models import Sequential
