@@ -1,4 +1,3 @@
-from function import *
 from time import sleep
 
 for action in actions: 
