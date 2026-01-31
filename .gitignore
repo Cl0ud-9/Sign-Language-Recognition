@@ -34,3 +34,5 @@ Image/
 
 # VS Code
 .vscode/
+
+.venv
