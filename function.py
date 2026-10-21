@@ -1,8 +1,13 @@
 # Based on kumarvivek9088/SignLanguageDetectionUsingML (GPL-3.0). Modified by Cloud/9, 2024-2026: see NOTICE.
+import argparse
 import os
+import sys
 
-import cv2
-import mediapipe as mp
+# MediaPipe loads TensorFlow, whose start-up notices would bury the scripts' own messages; errors still show
+os.environ.setdefault('TF_CPP_MIN_LOG_LEVEL', '2')
+
+import cv2  # noqa: E402
+import mediapipe as mp  # noqa: E402
 import numpy as np
 
 mp_drawing = mp.solutions.drawing_utils
@@ -26,6 +31,23 @@ sequence_length = 30
 
 # 21 hand landmarks, each (x, y, z)
 NUM_KEYPOINTS = 21 * 3
+
+
+def camera_arguments(description):
+    """Parse the scripts' one option: which camera to use."""
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument('--camera', type=int, default=0, help='camera number, if you have more than one (default 0)')
+    return parser.parse_args()
+
+
+def open_camera(index=0):
+    """Open a webcam, or stop with a message that says what to check."""
+    cap = cv2.VideoCapture(index)
+    if not cap.isOpened():
+        other = 1 if index == 0 else 0
+        sys.exit(f"Could not open camera {index}. Check that it is connected, not in use by another app, and allowed "
+                 f"in your privacy settings. To use a different camera, run with --camera {other}.")
+    return cap
 
 
 def mediapipe_detection(image, model):

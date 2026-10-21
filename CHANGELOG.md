@@ -5,6 +5,22 @@ What changed in each version of Sign Language Recognition.
 The format follows [Keep a Changelog](https://keepachangelog.com), and the versions follow
 [Semantic Versioning](https://semver.org).
 
+## [1.1.1] - 2026-10-22
+
+### Fixed
+
+- `app.py` and `collectdata.py` closed without a word when the webcam could not be opened, for example when another
+  app was using it or the privacy settings blocked it. They now say so and list what to check, and `app.py` checks
+  the camera before spending time loading the model.
+
+### Added
+
+- `--camera` chooses which camera `app.py` and `collectdata.py` use, for computers with more than one.
+
+### Changed
+
+- TensorFlow's start-up notices are hidden, so the scripts' own messages are easy to see. Errors still show.
+
 ## [1.1.0] - 2026-10-21
 
 ### Fixed

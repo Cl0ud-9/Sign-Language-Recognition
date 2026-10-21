@@ -2,8 +2,20 @@
 import cv2
 import numpy as np
 
-from function import actions, extract_keypoints, load_trained_model, mediapipe_detection, mp_hands, sequence_length
+from function import (
+    actions,
+    camera_arguments,
+    extract_keypoints,
+    load_trained_model,
+    mediapipe_detection,
+    mp_hands,
+    open_camera,
+    sequence_length,
+)
 
+args = camera_arguments('Recognise signs live from a webcam. Press q to quit.')
+# Open the camera before loading the model, so a missing camera is reported straight away
+cap = open_camera(args.camera)
 model = load_trained_model()
 
 sequence = []
@@ -12,7 +24,6 @@ accuracy = []
 predictions = []
 threshold = 0.8
 
-cap = cv2.VideoCapture(0)
 with mp_hands.Hands(
     model_complexity=0,
     min_detection_confidence=0.5,
@@ -21,6 +32,7 @@ with mp_hands.Hands(
     while cap.isOpened():
         ret, frame = cap.read()
         if not ret:
+            print('The camera stopped sending frames.')
             break
 
         # Only the boxed region on the left of the frame is read

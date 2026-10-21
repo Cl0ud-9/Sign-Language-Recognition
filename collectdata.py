@@ -8,19 +8,22 @@ import string
 
 import cv2
 
-from function import IMAGE_PATH
+from function import IMAGE_PATH, camera_arguments, open_camera
 
 WORD_KEYS = {'1': 'name', '2': 'hi', '3': 'is', '4': 'my', '5': 'glad', '6': 'to', '7': 'what', '8': 'your'}
 LABELS = {c: c.upper() for c in string.ascii_lowercase}
 LABELS.update(WORD_KEYS)
 
+args = camera_arguments('Save webcam crops as training images. Keys a-z and 1-8 save, Esc quits.')
+cap = open_camera(args.camera)
+
 for folder in LABELS.values():
     os.makedirs(os.path.join(IMAGE_PATH, folder), exist_ok=True)
 
-cap = cv2.VideoCapture(0)
 while True:
     ret, frame = cap.read()
     if not ret:
+        print('The camera stopped sending frames.')
         break
 
     cv2.rectangle(frame, (0, 40), (300, 400), (255, 255, 255), 2)

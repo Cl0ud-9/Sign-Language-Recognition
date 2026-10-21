@@ -56,6 +56,9 @@ The trained model is in the repository, so the app runs without the dataset. Kee
 sign for about a second, and press `q` to quit. A sign is shown once the last ten predictions agree and the model is
 more than 80% sure.
 
+With more than one camera, pick one with `python app.py --camera 1`. If the camera cannot be opened, the app says so
+and lists what to check.
+
 ## How it works
 
 ```
