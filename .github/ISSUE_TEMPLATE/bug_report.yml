@@ -1,0 +1,45 @@
+name: Bug report
+description: Something does not work, or recognises signs wrongly
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time. The **Honest limits** section of the
+        [README](https://github.com/Cl0ud-9/Sign-Language-Recognition#honest-limits) explains the most common reasons a
+        sign is not recognised (lighting, the hand leaving the box, other people's hands).
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where does it go wrong?
+      options:
+        - Installing the requirements
+        - The live app (app.py)
+        - Collecting images (collectdata.py)
+        - Making keypoints (data.py)
+        - Training or evaluating (trainmodel.py, evaluate.py)
+        - The frame extractor (dataset_tools)
+        - The Kaggle dataset
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: The error or the terminal output
+      render: text
+  - type: input
+    id: env
+    attributes:
+      label: Operating system and Python version
+      placeholder: Windows 11, Python 3.11.9
+  - type: textarea
+    id: more
+    attributes:
+      label: Anything else
+      description: A screenshot of the app window helps when a sign is misread.

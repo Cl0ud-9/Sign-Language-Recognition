@@ -1,0 +1,36 @@
+Sign Language Recognition
+Copyright (C) 2024-2026 Cloud/9 (https://github.com/Cl0ud-9)
+
+This project started from SignLanguageDetectionUsingML by Vivek Kumar
+(https://github.com/kumarvivek9088/SignLanguageDetectionUsingML), licensed under the GNU General Public License v3.0.
+As a modified version of that work, this project is distributed under the same license: see LICENSE.
+
+Changes made by Cloud/9:
+
+  2024-03 to 2024-05
+  - Recorded a new dataset of eight Indian Sign Language words (hi, my, name, is, what, your, glad, to) and the
+    letters A, B and C, and trained a new model on it. The upstream model recognised only A, B and C.
+  - function.py: the eight words replace A, B and C as the signs the model learns.
+  - collectdata.py: keys 1-8 save word signs. app.py: shows the confidence as a percentage.
+  - trainmodel.py: checked and padded keypoint shapes before training. Added info.py.
+
+  2026-01 to 2026-10
+  - function.py: paths relative to the project, load_trained_model() and load_dataset(), which turns frames where
+    no hand was found into zeros and never unpickles a file.
+  - trainmodel.py: fixed a crash on such frames, a fixed and stratified train/test split, held-out accuracy.
+  - evaluate.py (new): accuracy, per-sign report and confusion matrix.
+  - collectdata.py: rewritten around a key-to-folder table; Esc quits so that q still saves the letter Q.
+  - data.py: explicit imports, skips missing images, saves zeros for frames without a hand.
+  - dataset_tools/video_frame.py (new): frame extractor used to build the word dataset.
+  - Tests, continuous integration and project documentation.
+
+Each changed source file carries a notice pointing here.
+
+Model weights (model.h5, model.json) were trained by Cloud/9 on the dataset below and are distributed under the
+same license as the code.
+
+The dataset (https://www.kaggle.com/datasets/paragtonpe/sign-language-recognition-dataset) was recorded by Cloud/9
+and is published separately under CC BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/).
+
+Dependencies are installed from PyPI, not bundled. Each keeps its own license: TensorFlow, Keras, MediaPipe and OpenCV
+(Apache License 2.0), NumPy and scikit-learn (BSD 3-Clause).

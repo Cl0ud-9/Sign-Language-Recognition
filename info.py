@@ -1,20 +1,14 @@
-import tensorflow as tf
+# Prints the layers and parameter counts of the trained model.
+from function import load_trained_model
 
-# Load the saved model
-model = tf.keras.models.load_model('model.h5')
+model = load_trained_model()
 
-# Print the type of model
-print("Model Type:")
-print(type(model))
-
-# Print layer information
-print("\nLayer Information:")
+print("Layer Information:")
 for layer in model.layers:
     print(layer.name)
     print("Output Shape:", layer.output_shape)
     print("Number of Parameters:", layer.count_params())
     print()
 
-# Print model summary
-print("\nModel Summary:")
+print("Model Summary:")
 model.summary()

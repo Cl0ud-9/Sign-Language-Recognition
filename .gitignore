@@ -1,38 +1,26 @@
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+.pytest_cache/
+.ruff_cache/
 
-# Virtual Environment
+# Virtual environments
+.venv/
 venv/
 env/
-ENV/
 
-# Project Specific
-Logs/
-MP_Data/
-docs/
+# Data: download it from Kaggle (see README), it is not kept in git
 Image/
+MP_Data/
+Logs/
+output_frames/
 
-# VS Code
+# Project report files; only the README pictures are tracked
+docs/*
+!docs/img/
+
+# Editors and OS
 .vscode/
-
-.venv
+.idea/
+.DS_Store
+Thumbs.db
