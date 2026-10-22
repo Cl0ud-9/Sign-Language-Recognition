@@ -5,6 +5,25 @@ What changed in each version of Sign Language Recognition.
 The format follows [Keep a Changelog](https://keepachangelog.com), and the versions follow
 [Semantic Versioning](https://semver.org).
 
+## [1.2.0] - 2026-10-22
+
+### Changed
+
+- The app runs the model on NumPy instead of TensorFlow. `sign_model.py` implements the LSTM's forward pass and loads
+  `model.npz`; a test checks it against Keras' own outputs for the same inputs. Installing the app no longer
+  downloads TensorFlow, and it now works on Python 3.12 as well as 3.10 and 3.11.
+- Training moves to `requirements-train.txt` (TensorFlow 2.15, Python 3.10 or 3.11), and `trainmodel.py` also writes
+  `model.npz`. `tools/export_weights.py` converts an existing `model.h5` without TensorFlow.
+- The on-screen display: a panel with the recognised sign and a confidence bar, the hand's landmarks drawn in the
+  box, a box that turns green when a hand is found, a line saying what the app is waiting for, and the frame rate.
+- `info.py` describes the model without TensorFlow.
+
+### Fixed
+
+- `app.py` hid every error behind a catch-all, so a real failure looked like "no sign yet". Frames without a hand now
+  restart the 30-frame window on purpose, and other errors are no longer swallowed.
+- The confidence shown stayed at the value from when the sign was first recognised; it now follows the model.
+
 ## [1.1.1] - 2026-10-22
 
 ### Fixed

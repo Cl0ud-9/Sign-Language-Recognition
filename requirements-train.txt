@@ -1,0 +1,3 @@
+# Training (trainmodel.py): Python 3.10 or 3.11. The model is built with Keras 2.15, which TensorFlow 2.15 provides.
+-r requirements.txt
+tensorflow==2.15.1

@@ -8,7 +8,7 @@ target-version = "py310"
 select = ["E", "F", "W", "I"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["function", "trainmodel", "video_frame"]
+known-first-party = ["function", "sign_model", "trainmodel", "video_frame"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

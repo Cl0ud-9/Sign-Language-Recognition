@@ -1,5 +1,5 @@
-# Python 3.10 or 3.11. The model was saved with Keras 2.15, which TensorFlow 2.15 provides.
-tensorflow==2.15.1
+# Running the app and evaluate.py: Python 3.10, 3.11 or 3.12. TensorFlow is not needed: the model runs on NumPy.
+# To train, install requirements-train.txt instead.
 mediapipe==0.10.14
 opencv-contrib-python==4.11.0.86
 numpy==1.26.4

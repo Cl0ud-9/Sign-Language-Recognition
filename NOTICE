@@ -23,14 +23,16 @@ Changes made by Cloud/9:
   - data.py: explicit imports, skips missing images, saves zeros for frames without a hand.
   - dataset_tools/video_frame.py (new): frame extractor used to build the word dataset.
   - Tests, continuous integration and project documentation.
+  - sign_model.py (new): the model's forward pass in NumPy, so the app runs without TensorFlow; model.npz holds the
+    same weights as model.h5. app.py: a new on-screen display and sign smoothing (SignSmoother in function.py).
 
 Each changed source file carries a notice pointing here.
 
-Model weights (model.h5, model.json) were trained by Cloud/9 on the dataset below and are distributed under the
+Model weights (model.h5, model.json, model.npz) were trained by Cloud/9 on the dataset below and are distributed under the
 same license as the code.
 
 The dataset (https://www.kaggle.com/datasets/paragtonpe/sign-language-recognition-dataset) was recorded by Cloud/9
 and is published separately under CC BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
 Dependencies are installed from PyPI, not bundled. Each keeps its own license: TensorFlow, Keras, MediaPipe and OpenCV
-(Apache License 2.0), NumPy and scikit-learn (BSD 3-Clause).
+(Apache License 2.0), NumPy, scikit-learn and h5py (BSD 3-Clause).

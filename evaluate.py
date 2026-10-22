@@ -4,8 +4,7 @@ import argparse
 import numpy as np
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
-from function import actions, load_dataset, load_trained_model
-from trainmodel import split
+from function import actions, load_dataset, load_trained_model, split
 
 parser = argparse.ArgumentParser(description='Evaluate model.json + model.h5 on MP_Data/.')
 parser.add_argument('--all', action='store_true',

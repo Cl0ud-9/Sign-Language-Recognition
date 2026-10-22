@@ -1,18 +1,25 @@
 # Based on kumarvivek9088/SignLanguageDetectionUsingML (GPL-3.0). Modified by Cloud/9, 2024-2026: see NOTICE.
-# Trains the LSTM on MP_Data/ and writes model.json and model.h5.
+# Trains the LSTM on MP_Data/ and writes model.json, model.h5 and model.npz (the copy the app runs on NumPy).
+# Training needs TensorFlow: pip install -r requirements-train.txt (Python 3.10 or 3.11).
 import argparse
 
 from keras.callbacks import TensorBoard
 from keras.layers import LSTM, Dense
 from keras.models import Sequential
 from keras.utils import to_categorical
-from sklearn.model_selection import train_test_split
 
-from function import LOG_PATH, MODEL_JSON, MODEL_WEIGHTS, NUM_KEYPOINTS, actions, load_dataset, sequence_length
-
-# Shared with evaluate.py so the held-out sequences are the same in both
-TEST_SIZE = 0.05
-SPLIT_SEED = 42
+from function import (
+    LOG_PATH,
+    MODEL_JSON,
+    MODEL_NPZ,
+    MODEL_WEIGHTS,
+    NUM_KEYPOINTS,
+    actions,
+    load_dataset,
+    sequence_length,
+    split,
+)
+from sign_model import SignModel
 
 
 def build_model():
@@ -25,10 +32,6 @@ def build_model():
     model.add(Dense(actions.shape[0], activation='softmax'))
     model.compile(optimizer='Adam', loss='categorical_crossentropy', metrics=['categorical_accuracy'])
     return model
-
-
-def split(X, y):
-    return train_test_split(X, y, test_size=TEST_SIZE, random_state=SPLIT_SEED, stratify=y)
 
 
 if __name__ == '__main__':
@@ -49,5 +52,7 @@ if __name__ == '__main__':
 
     with open(MODEL_JSON, 'w') as json_file:
         json_file.write(model.to_json())
-    # A full model file: app.py reads its weights, info.py loads it whole
+    # The Keras model, to train further, and the same weights for NumPy, which the app and evaluate.py load
     model.save(MODEL_WEIGHTS)
+    SignModel.from_keras(model).save(MODEL_NPZ)
+    print('Wrote model.json, model.h5 and model.npz')

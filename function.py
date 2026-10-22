@@ -2,8 +2,10 @@
 import argparse
 import os
 import sys
+from collections import deque
 
-# MediaPipe loads TensorFlow, whose start-up notices would bury the scripts' own messages; errors still show
+# TensorFlow (for training) and MediaPipe's TensorFlow Lite runtime print start-up notices that would bury the
+# scripts' own messages; errors still show
 os.environ.setdefault('TF_CPP_MIN_LOG_LEVEL', '2')
 
 import cv2  # noqa: E402
@@ -21,6 +23,8 @@ DATA_PATH = os.path.join(ROOT, 'MP_Data')
 LOG_PATH = os.path.join(ROOT, 'Logs')
 MODEL_JSON = os.path.join(ROOT, 'model.json')
 MODEL_WEIGHTS = os.path.join(ROOT, 'model.h5')
+# The same weights for NumPy: what the app and evaluate.py load (see sign_model.py)
+MODEL_NPZ = os.path.join(ROOT, 'model.npz')
 
 # Signs the model recognises, in the order of its output layer
 actions = np.array(['to', 'my', 'glad', 'hi', 'is', 'what', 'your', 'name'])
@@ -80,14 +84,51 @@ def extract_keypoints(results):
     return None
 
 
-def load_trained_model():
-    """Load the trained LSTM from model.json and model.h5."""
-    from keras.models import model_from_json
+# The held-out split, shared by trainmodel.py and evaluate.py so both use the same sequences
+TEST_SIZE = 0.05
+SPLIT_SEED = 42
 
-    with open(MODEL_JSON) as f:
-        model = model_from_json(f.read())
-    model.load_weights(MODEL_WEIGHTS)
-    return model
+
+def split(X, y):
+    from sklearn.model_selection import train_test_split
+
+    return train_test_split(X, y, test_size=TEST_SIZE, random_state=SPLIT_SEED, stratify=y)
+
+
+def load_trained_model():
+    """Load the trained model from model.npz. It runs on NumPy, so recognising signs does not need TensorFlow."""
+    from sign_model import SignModel
+
+    return SignModel.load(MODEL_NPZ)
+
+
+class SignSmoother:
+    """Turn per-frame predictions into a steady answer.
+
+    A sign is shown once the last `agree` predictions all name it and the newest is more than `threshold` sure. It
+    stays shown, with its latest confidence, until another sign takes its place or reset() is called.
+    """
+
+    def __init__(self, agree=10, threshold=0.8):
+        self.threshold = threshold
+        self.recent = deque(maxlen=agree)
+        self.sign = None
+        self.confidence = 0.0
+
+    def update(self, probs):
+        best = int(np.argmax(probs))
+        self.recent.append(best)
+        steady = len(self.recent) == self.recent.maxlen and len(set(self.recent)) == 1
+        if steady and probs[best] > self.threshold:
+            self.sign, self.confidence = str(actions[best]), float(probs[best])
+        elif self.sign == actions[best]:
+            self.confidence = float(probs[best])
+        return self.sign
+
+    def reset(self):
+        self.recent.clear()
+        self.sign = None
+        self.confidence = 0.0
 
 
 def load_frame(path):
